@@ -34,10 +34,10 @@ class WaybillController extends Controller
 
         // Search in both Clients and Customers tables
         $shippers = DB::table('clients')
-                    ->select('name', 'address', 'postcode', 'attention', 'tel')
+                    ->select('name', 'email', 'address', 'postcode', 'attention', 'tel')
                     ->where('name', 'like', "$query%")
                     ->union(DB::table('customers')
-                            ->select('name', 'address', 'postcode', 'attention', 'tel')
+                            ->select('name', 'email','address', 'postcode', 'attention', 'tel')
                             ->where('name', 'like', "$query%"))
                     ->get();
 
@@ -55,10 +55,10 @@ class WaybillController extends Controller
 
         // Search in both Clients and Customers tables
         $receivers = DB::table('clients')
-                    ->select('name', 'address', 'postcode', 'attention', 'tel')
+                    ->select('name','email', 'address', 'postcode', 'attention', 'tel')
                     ->where('name', 'like', "$query%")
                     ->union(DB::table('customers')
-                            ->select('name', 'address', 'postcode', 'attention', 'tel')
+                            ->select('name', 'email', 'address', 'postcode', 'attention', 'tel')
                             ->where('name', 'like', "$query%"))
                     ->get();
 

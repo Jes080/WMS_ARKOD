@@ -29,4 +29,9 @@ class Waybill extends Model
         'order_total_weight',
         'remarks',
     ];
+
+        public function statusName()
+    {
+        return $this->belongsTo(Status::class, 'status');
+    }
 }

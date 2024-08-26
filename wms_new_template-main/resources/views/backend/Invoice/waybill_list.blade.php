@@ -58,7 +58,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $waybill->waybill_no }}</td>
                                     <td>{{ $waybill->remarks }}</td>
-                                    <td>status</td>
+                                    <td>{{ $waybill->statusName->status  }}</td>
                                     <td>
                                         <div class="d-flex align-items-center">
                                         {{-- generate PDF --}}

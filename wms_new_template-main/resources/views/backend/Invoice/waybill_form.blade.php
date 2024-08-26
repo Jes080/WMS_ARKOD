@@ -201,6 +201,7 @@
             // Function to fill shipper details
             function fillShipperDetails(details) {
                 $('#shipper_name').val(details.name);
+                $('#shipper_email').val(details.email);
                 $('#shipper_address').val(details.address);
                 $('#shipper_postcode').val(details.postcode);
                 $('#shipper_attention').val(details.attention);
@@ -211,6 +212,7 @@
             // Function to fill receiver details
             function fillReceiverDetails(details) {
                 $('#receiver_name').val(details.name);
+                $('#receiver_email').val(details.email);
                 $('#receiver_address').val(details.address);
                 $('#receiver_postcode').val(details.postcode);
                 $('#receiver_attention').val(details.attention);
