@@ -48,6 +48,7 @@
                                     <th>#</th>
                                     <th>Waybill No.</th>
                                     <th>Remarks</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -57,6 +58,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $waybill->waybill_no }}</td>
                                     <td>{{ $waybill->remarks }}</td>
+                                    <td>status</td>
                                     <td>
                                         <div class="d-flex align-items-center">
                                         {{-- generate PDF --}}

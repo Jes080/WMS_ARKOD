@@ -40,6 +40,7 @@
         .waybill-details table {
             width: 100%;
             border-collapse: collapse;
+
         }
 
         .shipper-details table, .receiver-details table {
@@ -58,7 +59,7 @@
             border-collapse: collapse;
         }
         .order-details td {
-            padding: 8px;
+            padding-left: 8px;
             vertical-align: top;
             word-wrap: break-word;
         }
@@ -154,6 +155,10 @@
                         <td style="width: 60px;">Phone:</td>
                         <td>{{ $shipper['tel'] }}</td>
                     </tr>
+                    <tr>
+                        <td style="width: 60px;">Email:</td>
+                        <td>{{ $shipper['email'] }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -181,6 +186,10 @@
                         <td style="width: 60px;">Phone:</td>
                         <td>{{ $receiver['tel'] }}</td>
                     </tr>
+                    <tr>
+                        <td style="width: 60px;">Email:</td>
+                        <td>{{ $receiver['email'] }}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -192,9 +201,9 @@
                 </tr>
                 <tr>
                     <td class="border-right">
-                        <table>
+                        <table style="padding: 0px; margin:0px;">
                             <tbody>
-                                <tr>
+                                <tr >
                                     <td>Content:</td>
                                     <td>{{ $order['content'] }}</td>
                                 </tr>

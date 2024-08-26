@@ -82,11 +82,13 @@ class WaybillController extends Controller
             'shipper_details.postcode' => 'required|string',
             'shipper_details.attention' => 'nullable|string',
             'shipper_details.tel' => 'required|string',
+            'shipper_details.email' => 'nullable|string',
             'receiver_details.name' => 'required|string',
             'receiver_details.address' => 'required|string',
             'receiver_details.postcode' => 'required|string',
             'receiver_details.attention' => 'nullable|string',
             'receiver_details.tel' => 'required|string',
+            'receiver_details.email' => 'nullable|string',
         ]);
 
         // Handle order products data (optional fields)
@@ -117,15 +119,18 @@ class WaybillController extends Controller
         $waybill->shipper_postcode = $request->input('shipper_details.postcode');
         $waybill->shipper_attention = $request->input('shipper_details.attention');
         $waybill->shipper_tel = $request->input('shipper_details.tel');
+        $waybill->shipper_email = $request->input('shipper_details.email');
         $waybill->receiver_name = $request->input('receiver_details.name');
         $waybill->receiver_address = $request->input('receiver_details.address');
         $waybill->receiver_postcode = $request->input('receiver_details.postcode');
         $waybill->receiver_attention = $request->input('receiver_details.attention');
         $waybill->receiver_tel = $request->input('receiver_details.tel');
+        $waybill->receiver_email = $request->input('receiver_details.email');
         $waybill->order_content = $request->input('order_products.content');
         $waybill->order_category = $request->input('order_products.category');
         $waybill->order_size = $request->input('order_products.size');
         $waybill->order_total_weight = $request->input('order_products.total_weight');
+        $waybill->status = 1;
         $waybill->save();
 
         // Data for PDF
@@ -140,6 +145,7 @@ class WaybillController extends Controller
                 'postcode' => $waybill->shipper_postcode,
                 'attention' => $waybill->shipper_attention,
                 'tel' => $waybill->shipper_tel,
+                'email' => $waybill->shipper_email,
             ],
             'receiver' => [
                 'name' => $waybill->receiver_name,
@@ -147,6 +153,7 @@ class WaybillController extends Controller
                 'postcode' => $waybill->receiver_postcode,
                 'attention' => $waybill->receiver_attention,
                 'tel' => $waybill->receiver_tel,
+                'email' => $waybill->receiver_email,
             ],
             'order' => [
                 'content' => $waybill->order_content,
@@ -188,6 +195,7 @@ class WaybillController extends Controller
                 'postcode' => $waybill->shipper_postcode,
                 'attention' => $waybill->shipper_attention,
                 'tel' => $waybill->shipper_tel,
+                'email' => $waybill->shipper_email,
             ],
             'receiver' => [
                 'name' => $waybill->receiver_name,
@@ -195,6 +203,7 @@ class WaybillController extends Controller
                 'postcode' => $waybill->receiver_postcode,
                 'attention' => $waybill->receiver_attention,
                 'tel' => $waybill->receiver_tel,
+                'email' => $waybill->receiver_email,
             ],
             'order' => [
                 'content' => $waybill->order_content,

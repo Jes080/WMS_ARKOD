@@ -119,7 +119,7 @@ class PickerController extends Controller
             ->join('delivery', 'orders.order_no', '=', 'delivery.id')
             ->where('orders.user_id', $user->id)
             ->orderBy('created_at', 'desc')
-            ->select('orders.id', 'orders.user_id', 'orders.product_id', 'orders.quantity', 'orders.order_no', 'delivery.order_no', 'orders.created_at', 'orders.updated_at', 'products.product_name')
+            ->select('orders.id', 'orders.user_id', 'orders.product_id', 'orders.quantity', 'orders.order_no', 'delivery.order_no', 'orders.created_at', 'orders.updated_at', 'products.name')
             ->get()
             ->groupBy(function ($order) {
                 return $order->created_at->format('d-m-Y');
@@ -146,8 +146,8 @@ class PickerController extends Controller
         $pickers = DB::table('pickers')
             ->join('users', 'pickers.user_id', '=', 'users.id')
             ->join('products', 'pickers.product_id', '=', 'products.id')
-            ->select('pickers.id', 'pickers.user_id', 'users.name as picker_name', 'products.product_name', 'pickers.quantity', 'pickers.status', 'pickers.report', 'pickers.remark', 'pickers.created_at', 'pickers.updated_at')
-            ->groupBy('pickers.id', 'pickers.user_id', 'picker_name', 'products.product_name', 'pickers.quantity', 'pickers.status', 'pickers.report', 'pickers.remark', 'pickers.created_at', 'pickers.updated_at')
+            ->select('pickers.id', 'pickers.user_id', 'users.name as picker_name', 'products.name', 'pickers.quantity', 'pickers.status', 'pickers.report', 'pickers.remark', 'pickers.created_at', 'pickers.updated_at')
+            ->groupBy('pickers.id', 'pickers.user_id', 'picker_name', 'products.name', 'pickers.quantity', 'pickers.status', 'pickers.report', 'pickers.remark', 'pickers.created_at', 'pickers.updated_at')
             ->get();
 
         return view('backend.picker.picker_status_view', [
@@ -323,7 +323,7 @@ class PickerController extends Controller
             {
                 $rack->occupied += $product->weight_per_item * $picker->quantity;
                 $rack->save();
-                
+
             } else if ($floor != null)
             {
                 $floor->occupied += $product->weight_per_item * $picker->quantity;
@@ -353,7 +353,7 @@ class PickerController extends Controller
         // $pickerModel->delete();
         // dd($pickerModel);
         // // Delete records with the same order_no but different id
-    
+
         return redirect()->back()->with('success', 'Records with order_no ' . $orderNo . ' have been deleted.');
     }
 }

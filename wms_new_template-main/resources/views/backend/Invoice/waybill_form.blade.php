@@ -82,6 +82,10 @@
                                     <label for="shipper_tel">Phone:</label>
                                     <input type="text" class="form-control" name="shipper_details[tel]" id="shipper_tel" required>
                                 </div>
+                                <div class="form-group">
+                                    <label for="shipper_email">Email:</label>
+                                    <input type="text" class="form-control" name="shipper_details[email]" id="shipper_email">
+                                </div>
                                 <h3>Receiver Details</h3>
                                 {{--  --}}
                                 <div class="form-group">
@@ -106,6 +110,11 @@
                                     <label for="receiver_tel">Phone:</label>
                                     <input type="text" class="form-control" name="receiver_details[tel]" id="receiver_tel" required>
                                 </div>
+                                <div class="form-group">
+                                    <label for="receiver_email">Email:</label>
+                                    <input type="text" class="form-control" name="receiver_details[email]" id="receiver_email">
+                                </div>
+                                {{--  --}}
                                 <h3>Order Products</h3>
                                 <div class="form-group">
                                     <label for="order_content">Content:</label>
@@ -196,6 +205,7 @@
                 $('#shipper_postcode').val(details.postcode);
                 $('#shipper_attention').val(details.attention);
                 $('#shipper_tel').val(details.tel);
+                $('#shipper_email').val(details.email);
             }
 
             // Function to fill receiver details
@@ -205,6 +215,7 @@
                 $('#receiver_postcode').val(details.postcode);
                 $('#receiver_attention').val(details.attention);
                 $('#receiver_tel').val(details.tel);
+                $('#receiver_email').val(details.email);
             }
         });
 
