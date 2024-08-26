@@ -111,7 +111,7 @@ class WaybillController extends Controller
         $waybill = new Waybill();
         $waybill->date = $formattedDate;
         $waybill->no = $request->input('no');
-        $waybill->waybill_no = 'ARKDWB-' . $dateWb . '-' . $request->input('no') . $request->input('customer_id');
+        $waybill->waybill_no = 'ARKODWB-' . $dateWb . '-' . $request->input('no') . $request->input('customer_id');
         $waybill->customer_id = $request->input('customer_id');
         $waybill->service_type = $request->input('service_type');
         $waybill->shipper_name = $request->input('shipper_details.name');
