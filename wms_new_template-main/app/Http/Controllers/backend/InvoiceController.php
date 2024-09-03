@@ -61,7 +61,7 @@ class InvoiceController extends Controller
             'payment_terms' => 'nullable|string',
             'due_date' => 'nullable|string',
             'items' => 'nullable|array',
-            'items.*.quantity' => 'nullable|integer',
+            'items.*.quantity' => 'nullable|numeric',
             'items.*.description' => 'nullable|string',
             'items.*.unit_price' => 'nullable|numeric',
         ]);
