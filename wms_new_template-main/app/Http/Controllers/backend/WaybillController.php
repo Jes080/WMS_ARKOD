@@ -177,6 +177,88 @@ class WaybillController extends Controller
         ]);
     }
 
+    public function sendAPI(Request $request, $id)
+    {
+        $waybill = Waybill::findOrFail($id);
+
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://exprexalogistic.com.my/api/pick-ups/add-arkod',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'sender_name' => $waybill->shipper_name,
+                'sender_company_name' => '',
+                'sender_contact1' => $waybill->shipper_tel,
+                'sender_contact2' => '',
+                'sender_email' => $waybill->shipper_email,
+                'sender_address' => $waybill->shipper_address,
+                'sender_postcode' => $waybill->shipper_postcode,
+                'sender_city' => '-',
+                'sender_state' => '-',
+                'sender_country' => '-',
+                // 'services_checkbox[]' => 'Express',
+                // 'services_checkbox[]' => 'Cargo',
+                // 'services_checkbox[]' => 'SEA',
+                'services_checkbox[]' => 'Land',
+                'receiver_customer_id' => '',
+                'receiver_name' => $waybill->receiver_name,
+                'receiver_company_name' => '',
+                'receiver_contact1' => $waybill->receiver_tel,
+                'receiver_contact2' => '',
+                'receiver_email' => $waybill->receiver_email,
+                'receiver_address' => $waybill->receiver_address,
+                'receiver_postcode' => $waybill->receiver_postcode,
+                'receiver_city' => '-',
+                'receiver_state' => '-',
+                'receiver_country' => '-',
+                'billing_customer_id' => '1',
+                'billing_name' => 'ALEX',
+                'billing_company_name' => 'ARKOD SMART LOGITECH SDN BHD',
+                'billing_contact1' => '0123231698',
+                'billing_contact2' => '',
+                'billing_email' => 'admin@arkod.com.my',
+                'billing_address' => '1451, JALAN KELULI, BINTAWA INDUSTRIAL ESTATE',
+                'billing_postcode' => '93450',
+                'billing_city' => 'KUCHING',
+                'billing_state' => 'SARAWAK',
+                'billing_country' => 'MALAYSIA',
+                'billing_checkbox' => '-',
+                'item_name' => $waybill->order_content,
+                'item_date' => $waybill->date,
+                'item_quantity' => '0',
+                'item_invoice' => '-',
+                'item_dimension' => $waybill->order_size,
+                'gross_weight' => $waybill->order_total_weight,
+                'item_weight' => '-',
+                'item_cod' => '0',
+                'item_remarks' => '-',
+                'radio_weight' => '-',
+                'user_id' => '159',
+                'doc_file[]' => '',
+                'doc_file[]' => '',
+                'tracking_num' => $waybill->waybill_no
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        if ($httpCode === 200) {
+            return response()->json(['success' => true, 'response' => $response]);
+        } else {
+             return response()->json(['success' => false, 'response' => $response], $httpCode);
+        }
+    }
+
+
+
 
 
     public function generatePdf($id)
@@ -232,7 +314,7 @@ class WaybillController extends Controller
 {
     $request->validate([
         'waybill_id' => 'required|exists:waybills,id',
-        'remarks' => 'required|string|max:255',
+        'remarks' => 'string|max:255',
     ]);
 
     $waybill = Waybill::find($request->waybill_id);
@@ -262,4 +344,3 @@ class WaybillController extends Controller
     }
 
 }
-
