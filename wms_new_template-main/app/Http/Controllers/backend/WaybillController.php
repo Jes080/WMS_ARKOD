@@ -133,6 +133,8 @@ class WaybillController extends Controller
         $waybill->status = 1;
         $waybill->save();
 
+        //add exprexa API cURL here ***
+
         // Data for PDF
         $data = [
             'customer_id' => $waybill->customer_id,
