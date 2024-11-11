@@ -56,7 +56,12 @@
                                         <option value="Sea Freight">Sea Freight</option>
                                         <option value="Air Freight">Air Freight</option>
                                         <option value="Land Transport">Land Transport</option>
+                                        <option value="Domestic Pick Up">Domestic Pick Up</option>
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="date">Date:</label>
+                                    <input type="date" class="form-control" name="date" id="date" required>
                                 </div>
                                 <h3>Shipper Details</h3>
                                 {{--  --}}
