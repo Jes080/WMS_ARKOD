@@ -65,6 +65,10 @@
                                         <button class="text-info me-2" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-original-title="Generate PDF" alt="alert" onclick="window.open('{{ route('waybills.pdf', $waybill->id) }}', '_blank')">
                                             <i class="ti-printer" alt="alert"></i>
                                         </button>
+                                        {{-- send API --}}
+                                        <button class="text-info me-2" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-original-title="Send API" alt="alert" onclick="sendAPIRequest({{ $waybill->id }})">
+                                            <i class="ti-share" alt="alert"></i>
+                                        </button>
                                         {{-- add remarks --}}
                                         <button class="text-info me-2" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-original-title="Add Remarks" alt="alert" onclick="showRemarksModal('{{ $waybill->id }}')">
                                             <i class="ti-plus" alt="alert"></i>
@@ -103,7 +107,7 @@
                     <input type="hidden" id="waybillId" name="waybill_id">
                     <div class="mb-3">
                         <label for="remarks" class="form-label">Remarks</label>
-                        <textarea class="form-control" id="remarks" name="remarks" rows="3" required></textarea>
+                        <textarea class="form-control" id="remarks" name="remarks" rows="3"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </form>
@@ -166,6 +170,32 @@
             }
         });
     });
+
+    function sendAPIRequest(waybillId) {
+        const url = `{{ route('waybills.sendAPI', ':id') }}`.replace(':id', waybillId);
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ id: waybillId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('API request sent successfully!');
+            } else {
+                alert('Failed to send API request.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while sending the API request.');
+        });
+    }
+
 </script>
 
 @endsection

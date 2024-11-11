@@ -55,6 +55,11 @@ Route::post('/waybills', [WaybillController::class, 'store'])->name('waybills.st
 Route::get('/waybills/{id}/pdf', [WaybillController::class, 'generatePdf'])->name('waybills.pdf');
 Route::delete('/waybills/{id}', [WaybillController::class, 'destroy'])->name('waybills.destroy');
 Route::post('/waybills/addRemarks', [WaybillController::class, 'addRemarks'])->name('waybills.addRemarks');
+Route::post('/waybills/{id}/send', [WaybillController::class, 'sendAPI'])->name('waybills.sendAPI');
+// Route to fetch the existing remark
+// Route::post('/waybills/addRemarks', [WaybillController::class, 'addRemarks'])->name('waybills.addRemarks');
+// Route::put('/waybills/{id}/remark', [WaybillController::class, 'updateRemarks'])->name('waybills.updateRemarks');
+
 
 //Invoice only
 Route::get('/customer/search', [InvoiceController::class, 'searchCustomer'])->name('customer.search');
