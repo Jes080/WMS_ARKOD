@@ -250,7 +250,7 @@ $formattedDate = date('Y-m-d', strtotime($pickupDate)); // Convert to Y-m-d form
                 'radio_weight' => '-',
                 'user_id' => '159',
                 'doc_file[]' => '',
-                'doc_file[]' => '',
+                //'doc_file[]' => '',
                 'tracking_num' => $waybill->waybill_no
             ),
         ));
