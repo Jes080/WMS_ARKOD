@@ -19,7 +19,8 @@ class WaybillController extends Controller
 {
     public function index()
     {
-        $waybills = Waybill::all();
+        //$waybills = Waybill::all();
+        $waybills = Waybill::orderBy('created_at', 'desc')->get();
         return view('backend.Invoice.waybill_list', compact('waybills'));
     }
 
