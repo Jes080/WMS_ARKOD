@@ -38,8 +38,10 @@
                         <div class="table-responsive">
 
                             <!-- Waybill Form -->
-                            <form id="waybillForm" action="{{ route('waybills.store') }}" method="POST">
+                            <form id="waybillForm" action="{{ route('waybills.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" id="waybill_id" value="{{ $waybill->id ?? '' }}">
+
                                 <div class="form-group">
                                     <label for="no">No:</label>
                                     <input type="text" class="form-control" name="no" id="no" required>
@@ -131,6 +133,20 @@
                                 <div class="form-group">
                                     <label for="order_total_weight">Total Weight:</label>
                                     <input type="text" class="form-control" name="order_products[total_weight]" id="order_total_weight">
+                                </div>
+                                {{--  --}}
+                                <h3>Upload Files</h3>
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3>Upload Files</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="dropzoneArea" class="dropzone">
+                                            <div class="dz-message" data-dz-message>
+                                                <span>Drag and drop files here or click to upload</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- Back Button -->
                                 <a href="{{ route('waybills.index') }}" class="btn btn-secondary">Back</a>
@@ -264,6 +280,41 @@
         // Handle the error here, e.g., display an error message
     });
 });
+
+Dropzone.options.dropzoneArea = {
+    url: "{{ route('waybills.uploadFiles') }}", // Define upload endpoint
+    paramName: "files", // The name of the file input
+    maxFilesize: 2, // Maximum file size in MB
+    acceptedFiles: ".jpg,.png,.pdf", // Define accepted file types
+    addRemoveLinks: true,
+    autoProcessQueue: false, // Prevent auto-upload when files are added
+    clickable: '#dropzoneArea', // Ensures only the area is clickable, not the entire form
+    headers: {
+        'X-CSRF-TOKEN': "{{ csrf_token() }}" // CSRF token for security
+    },
+    init: function() {
+        const myDropzone = this;
+        // Attach waybill_id to the request
+        // this.on("sending", function(file, xhr, formData) {
+        //     const waybillId = document.getElementById("waybill_id").value;
+        //     formData.append("waybill_id"); // Pass waybill_id dynamically
+        // });
+        this.on("addedfile", function(file) {
+            console.log("File added:", file);
+        });
+        this.on("success", function(file, response) {
+            console.log("File uploaded successfully");
+        });
+        this.on("error", function(file, errorMessage) {
+            console.log("Error uploading file:", errorMessage);
+        });
+         // Start processing the queue manually
+         document.querySelector("#generateWaybillButton").addEventListener("click", function() {
+            myDropzone.processQueue();
+        });
+    }
+};
+
     </script>
 @endsection
 

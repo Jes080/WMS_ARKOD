@@ -73,6 +73,14 @@
                                         <button class="text-info me-2" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-original-title="Add Remarks" alt="alert" onclick="showRemarksModal('{{ $waybill->id }}')">
                                             <i class="ti-plus" alt="alert"></i>
                                         </button>
+                                        <!-- Upload Files -->
+                                        <button class="text-info me-2" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-original-title="Upload Files" alt="alert" onclick="redirectToUploadFilesPage('{{ $waybill->id }}')">
+                                            <i class="ti-upload" alt="alert"></i>
+                                        </button>
+                                        <!-- View Files -->
+                                        <button class="text-info me-2" style="border: none; background: none;" data-bs-toggle="tooltip" data-bs-original-title="View Files" onclick="redirectToViewFiles('{{ $waybill->id }}')">
+                                            <i class="ti-eye"></i>
+                                        </button>
                                             <!-- Delete Form -->
                                             <form id="deleteForm{{ $waybill->id }}" action="{{ route('waybills.destroy', ['id' => $waybill->id]) }}" method="POST" class="d-inline">
                                                 @csrf
@@ -141,6 +149,7 @@
         document.getElementById('successAlert').style.display = 'none';
     }, 3000); // 3000 milliseconds = 3 seconds
 
+
     // Show remarks modal
     function showRemarksModal(waybillId) {
         $('#waybillId').val(waybillId);
@@ -196,6 +205,13 @@
         });
     }
 
+    function redirectToUploadFilesPage(waybillId) {
+        window.location.href = `{{ route('waybills.uploadFilesPage') }}?waybill_id=${waybillId}`;
+    }
+
+    function redirectToViewFiles(waybillId) {
+    window.location.href = `http://localhost/WMS_ARKOD/wms_new_template-main/public/waybills/${waybillId}/files`;
+    }
 </script>
 
 @endsection

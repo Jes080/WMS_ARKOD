@@ -45,5 +45,8 @@
     "format:lint": "prettier -l --single-quote --trailing-comma es5 'src/**/*.js'",
     "release": "./release"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "perfect-scrollbar": "file:"
+  }
 }

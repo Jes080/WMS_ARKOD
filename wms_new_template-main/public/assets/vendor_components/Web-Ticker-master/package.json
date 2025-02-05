@@ -3,7 +3,9 @@
   "version": "3.0.0",
   "description": "JQuery Web Ticker",
   "main": "gulpfile.js",
-  "dependencies": {},
+  "dependencies": {
+    "webticker": "file:"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-jshint": "^2.0.0",
@@ -20,9 +22,9 @@
     "url": "git+https://github.com/mazedigital/Web-Ticker.git"
   },
   "author": {
-      "name": "Jonathan Mifsud",
-      "email": "jon@maze.digital",
-      "url": "http://maze.digital"
+    "name": "Jonathan Mifsud",
+    "email": "jon@maze.digital",
+    "url": "http://maze.digital"
   },
   "license": "(GPL-3.0 or Commercial see license in license.md)",
   "bugs": {

@@ -56,6 +56,10 @@ Route::get('/waybills/{id}/pdf', [WaybillController::class, 'generatePdf'])->nam
 Route::delete('/waybills/{id}', [WaybillController::class, 'destroy'])->name('waybills.destroy');
 Route::post('/waybills/addRemarks', [WaybillController::class, 'addRemarks'])->name('waybills.addRemarks');
 Route::post('/waybills/{id}/send', [WaybillController::class, 'sendAPI'])->name('waybills.sendAPI');
+Route::get('/waybills/upload-files-page', [WaybillController::class, 'showUploadFilesPage'])->name('waybills.uploadFilesPage');
+Route::post('/waybills/upload-files', [WaybillController::class, 'uploadFiles'])->name('waybills.uploadFiles');
+Route::get('/waybills/{id}/files', [WaybillController::class, 'viewFiles'])->name('waybills.viewFiles');
+Route::delete('/files/{id}', [WaybillController::class, 'destroyFile'])->name('files.destroy');
 // Route to fetch the existing remark
 // Route::post('/waybills/addRemarks', [WaybillController::class, 'addRemarks'])->name('waybills.addRemarks');
 // Route::put('/waybills/{id}/remark', [WaybillController::class, 'updateRemarks'])->name('waybills.updateRemarks');
@@ -81,7 +85,7 @@ Route::post('register', [RegisterController::class, 'register']);
 // Route::get('/user_detail', function () {
 //     return view('backend.user.user_detail');
 // });
-Route::get('/user_detail', [ClientController::class, 'index'])->name('clients.index');
+// Route::get('/user_detail', [ClientController::class, 'index'])->name('clients.index');
 Route::get('/customer_detail', [CustomerController::class, 'index'])->name('customers.index');
 
 

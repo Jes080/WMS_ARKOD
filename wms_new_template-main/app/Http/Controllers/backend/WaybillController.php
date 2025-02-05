@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Client;
 use App\Models\Customer;
 use App\Models\Waybill;
+use App\Models\WaybillFile;
+
 
 class WaybillController extends Controller
 {
@@ -27,6 +29,13 @@ class WaybillController extends Controller
     {
         return view('backend.invoice.waybill_form');
     }
+
+    public function showUploadFilesPage(Request $request)
+{
+    $waybillId = $request->query('waybill_id');
+    return view('backend.invoice.waybill_fileupload', compact('waybillId'));
+}
+
 
     public function searchShipper(Request $request)
     {
@@ -89,6 +98,8 @@ class WaybillController extends Controller
             'receiver_details.attention' => 'nullable|string',
             'receiver_details.tel' => 'required|string',
             'receiver_details.email' => 'nullable|string',
+            'files' => 'nullable|array', // Ensure files are optional and can be an array
+            'files.*' => 'file|mimes:jpg,png,pdf,docx,jpeg|max:2048', // Validate file types and size
         ]);
 
         // Handle order products data (optional fields)
@@ -177,22 +188,125 @@ class WaybillController extends Controller
         ]);
     }
 
+    // public function sendAPI(Request $request, $id)
+    // {
+    //     $waybill = Waybill::findOrFail($id);
+
+    //         // Retrieve all files associated with the waybill_id
+    //     $files = WaybillFile::where('waybill_id', $id)->get();
+
+    //     // Prepare an array for file uploads
+    //     $fileUploads = [];
+    //     if ($files->isNotEmpty()) {
+    //         foreach ($files as $index => $file) {
+    //             $filePath = public_path('files/' . $file->file_name); // Adjusted file path
+
+    //             if (file_exists($filePath)) {
+    //                 // Use CURLFile to prepare the file for upload
+    //                 $fileUploads["doc_file[$index]"] = new \CURLFile($filePath, mime_content_type($filePath), '');
+    //             }
+    //         }
+    //     }
+
+    //     $curl = curl_init();
+    //     curl_setopt_array($curl, array(
+    //         CURLOPT_URL => 'https://exprexalogistic.com.my/api/pick-ups/add-arkod',
+    //         CURLOPT_RETURNTRANSFER => true,
+    //         CURLOPT_ENCODING => '',
+    //         CURLOPT_MAXREDIRS => 10,
+    //         CURLOPT_TIMEOUT => 30,
+    //         CURLOPT_FOLLOWLOCATION => true,
+    //         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    //         CURLOPT_CUSTOMREQUEST => 'POST',
+    //         CURLOPT_POSTFIELDS => array(
+    //             'sender_name' => $waybill->shipper_name,
+    //             'sender_company_name' => '',
+    //             'sender_contact1' => $waybill->shipper_tel,
+    //             'sender_contact2' => '',
+    //             'sender_email' => $waybill->shipper_email,
+    //             'sender_address' => $waybill->shipper_address,
+    //             'sender_postcode' => $waybill->shipper_postcode,
+    //             'sender_city' => '-',
+    //             'sender_state' => '-',
+    //             'sender_country' => '-',
+    //             // 'services_checkbox[]' => 'Express',
+    //             // 'services_checkbox[]' => 'Cargo',
+    //             // 'services_checkbox[]' => 'SEA',
+    //             'services_checkbox[]' => 'Land',
+    //             'receiver_customer_id' => '',
+    //             'receiver_name' => $waybill->receiver_name,
+    //             'receiver_company_name' => '',
+    //             'receiver_contact1' => $waybill->receiver_tel,
+    //             'receiver_contact2' => '',
+    //             'receiver_email' => $waybill->receiver_email,
+    //             'receiver_address' => $waybill->receiver_address,
+    //             'receiver_postcode' => $waybill->receiver_postcode,
+    //             'receiver_city' => '-',
+    //             'receiver_state' => '-',
+    //             'receiver_country' => '-',
+    //             'billing_customer_id' => '1',
+    //             'billing_name' => 'ALEX',
+    //             'billing_company_name' => 'ARKOD SMART LOGITECH SDN BHD',
+    //             'billing_contact1' => '0123231698',
+    //             'billing_contact2' => '',
+    //             'billing_email' => 'admin@arkod.com.my',
+    //             'billing_address' => '1451, JALAN KELULI, BINTAWA INDUSTRIAL ESTATE',
+    //             'billing_postcode' => '93450',
+    //             'billing_city' => 'KUCHING',
+    //             'billing_state' => 'SARAWAK',
+    //             'billing_country' => 'MALAYSIA',
+    //             'billing_checkbox' => '-',
+    //             'item_name' => $waybill->order_content,
+    //             'item_date' => $waybill->date,
+    //             'item_quantity' => '0',
+    //             'item_invoice' => '-',
+    //             'item_dimension' => $waybill->order_size,
+    //             'gross_weight' => $waybill->order_total_weight,
+    //             'item_weight' => '-',
+    //             'item_cod' => '0',
+    //             'item_remarks' => '-',
+    //             'radio_weight' => '-',
+    //             'user_id' => '159',
+    //             'doc_file[]' => $fileUploads,
+    //             //'doc_file[]' => '',
+    //             'tracking_num' => $waybill->waybill_no
+    //         ),
+    //     ));
+
+    //     $response = curl_exec($curl);
+    //     $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    //     curl_close($curl);
+
+    //     if ($httpCode === 200) {
+    //         return response()->json(['success' => true, 'response' => $response]);
+    //     } else {
+    //          return response()->json(['success' => false, 'response' => $response], $httpCode);
+    //     }
+    // }
+
     public function sendAPI(Request $request, $id)
     {
         $waybill = Waybill::findOrFail($id);
 
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://exprexalogistic.com.my/api/pick-ups/add-arkod',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array(
-                'sender_name' => $waybill->shipper_name,
+        // Retrieve all files associated with the waybill_id
+        $files = WaybillFile::where('waybill_id', $id)->get();
+
+        // Prepare an array for file uploads
+        $fileUploads = [];
+        if ($files->isNotEmpty()) {
+            foreach ($files as $index => $file) {
+                $filePath = public_path('files/' . $file->file_name); // Adjusted file path
+
+                if (file_exists($filePath)) {
+                    // Use CURLFile to prepare the file for upload
+                    $fileUploads["doc_file[$index]"] = new \CURLFile($filePath, mime_content_type($filePath), $file->file_name);
+                }
+            }
+        }
+
+        // Prepare cURL data
+        $postData = [
+            'sender_name' => $waybill->shipper_name,
                 'sender_company_name' => '',
                 'sender_contact1' => $waybill->shipper_tel,
                 'sender_contact2' => '',
@@ -240,25 +354,41 @@ class WaybillController extends Controller
                 'item_remarks' => '-',
                 'radio_weight' => '-',
                 'user_id' => '159',
-                'doc_file[]' => '',
-                'doc_file[]' => '',
+                // 'doc_file[]' => '',
+                //'doc_file[]' => '',
                 'tracking_num' => $waybill->waybill_no
-            ),
-        ));
+        ];
 
+        // Merge file uploads into post data
+        $postData = array_merge($postData, $fileUploads);
+
+        // Initialize cURL
+        $curl = curl_init();
+        curl_setopt_array($curl, [
+            CURLOPT_URL            => 'https://exprexalogistic.com.my/api/pick-ups/add-arkod',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING       => '',
+            CURLOPT_MAXREDIRS      => 10,
+            CURLOPT_TIMEOUT        => 30,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION   => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST  => 'POST',
+            CURLOPT_POSTFIELDS     => $postData,
+            CURLOPT_HTTPHEADER     => ['Content-Type: multipart/form-data'],
+        ]);
+
+        // Execute cURL request
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($curl);
         curl_close($curl);
 
         if ($httpCode === 200) {
-            return response()->json(['success' => true, 'response' => $response]);
+            return response()->json(['success' => true, 'response' => json_decode($response, true)]);
         } else {
-             return response()->json(['success' => false, 'response' => $response], $httpCode);
+            return response()->json(['success' => false, 'error' => $curlError, 'response' => $response], $httpCode);
         }
     }
-
-
-
 
 
     public function generatePdf($id)
@@ -324,13 +454,76 @@ class WaybillController extends Controller
     return response()->json(['success' => true]);
 }
 
+public function uploadFiles(Request $request)
+{
+    $request->validate([
+        'waybill_id' => 'required|exists:waybills,id',
+        'files.*' => 'required|file|max:40960', // Validation rules
+    ]);
 
-    public function destroy($id)
+    $uploadedFiles = $request->file('files');
+
+    // Check if there are any files uploaded
+    if (!$uploadedFiles) {
+        return back()->with('error', 'No files were uploaded.');
+    }
+
+    foreach ($uploadedFiles as $file) {
+        // $path = $file->store('pdfs', 'public');
+        $filepath = public_path('files/');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move($filepath, $filename);
+
+        // Save file information in the database
+        WaybillFile::create([
+            'waybill_id' => $request->waybill_id,
+            'file_name' => $filename,
+            'file_path' => 'files/' . $filename,
+        ]);
+    }
+
+    return redirect()->route('waybills.index')->with('success', 'Files uploaded successfully.');
+}
+
+
+public function viewFiles($id)
+{
+    $waybills = Waybill::findOrFail($id);
+    $files = $waybills->files;
+    return view('backend.Invoice.waybill_viewfiles', compact('waybills', 'files'));
+}
+
+public function destroyFile($id)
+{
+    // Find the file by ID
+    $file = WaybillFile::findOrFail($id);
+    $filePath = public_path('files/' . $file->file_name);
+    // Delete the file from storage
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+
+    // Delete the record from the database
+    $file->delete();
+
+    return redirect()->back()->with('success', 'File deleted successfully.');
+}
+
+public function destroy($id)
     {
-        $waybill = Waybill::findOrFail($id);
+    $file = WaybillFile::findOrFail($id);
+    $filePath = public_path('files/' . $file->file_name);
+    // Delete the file from storage
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+
+    // Delete the record from the database
+    $file->delete();
+
+    $waybill = Waybill::findOrFail($id);
 
     // to delete pdf from public/pdfs directory
-    // Construct the PDF file path using the waybill number
     $pdfFilePath = public_path('pdfs/' . $waybill->waybill_no . '.pdf');
 
     // Delete the PDF file if it exists

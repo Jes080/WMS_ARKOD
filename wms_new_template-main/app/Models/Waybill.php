@@ -34,4 +34,9 @@ class Waybill extends Model
     {
         return $this->belongsTo(Status::class, 'status');
     }
+
+        public function files()
+    {
+        return $this->hasMany(WaybillFile::class , 'waybill_id');
+    }
 }
