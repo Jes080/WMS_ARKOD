@@ -21,7 +21,8 @@ class WaybillController extends Controller
 {
     public function index()
     {
-        $waybills = Waybill::all();
+        //$waybills = Waybill::all();
+        $waybills = Waybill::orderBy('created_at', 'desc')->get();
         return view('backend.Invoice.waybill_list', compact('waybills'));
     }
 
@@ -86,6 +87,7 @@ class WaybillController extends Controller
             'no' => 'required|string',
             'customer_id' => 'required|string',
             'service_type' => 'required|string',
+            'date' => 'required|date',
             'shipper_details.name' => 'required|string',
             'shipper_details.address' => 'required|string',
             'shipper_details.postcode' => 'required|string',
@@ -113,10 +115,14 @@ class WaybillController extends Controller
             }
         }
 
-        $dateNow = Carbon::now();  // Current date and time
-        $dateWb = $dateNow->format('dmy');
+       // $dateNow = Carbon::now();  // Current date and time
+       // $dateWb = $dateNow->format('dmy');
         // Format current date for database storage
-        $formattedDate = $dateNow->format('Y-m-d');
+       // $formattedDate = $dateNow->format('Y-m-d');
+
+$pickupDate = $request->input('date'); // No formatting needed, use as-is
+$dateWb = date('dmy', strtotime($pickupDate)); // Convert to dmy format
+$formattedDate = date('Y-m-d', strtotime($pickupDate)); // Convert to Y-m-d format
 
         // Create a new Waybill instance
         $waybill = new Waybill();
@@ -144,11 +150,15 @@ class WaybillController extends Controller
         $waybill->status = 1;
         $waybill->save();
 
+        //add exprexa API cURL here ***
+
         // Data for PDF
         $data = [
             'customer_id' => $waybill->customer_id,
             'waybill_no' => $waybill->waybill_no,
-            'date' => Carbon::parse($waybill->date)->format('d-m-y'),
+           // 'date' => Carbon::parse($waybill->date)->format('d-m-y'),
+           'date' => $waybill->date,
+
             'service_type' => $waybill->service_type,
             'shipper' => [
                 'name' => $waybill->shipper_name,
@@ -354,8 +364,6 @@ class WaybillController extends Controller
                 'item_remarks' => '-',
                 'radio_weight' => '-',
                 'user_id' => '159',
-                // 'doc_file[]' => '',
-                //'doc_file[]' => '',
                 'tracking_num' => $waybill->waybill_no
         ];
 
@@ -399,7 +407,8 @@ class WaybillController extends Controller
         $data = [
             'customer_id' => $waybill->customer_id,
             'waybill_no' => $waybill->waybill_no,
-            'date' => Carbon::parse($waybill->date)->format('d-m-y'),
+            //'date' => Carbon::parse($waybill->date)->format('d-m-y'),
+            'date' => $waybill->date,
             'service_type' => $waybill->service_type,
             'shipper' => [
                 'name' => $waybill->shipper_name,

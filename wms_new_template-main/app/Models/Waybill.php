@@ -13,6 +13,7 @@ class Waybill extends Model
         'waybill_no',
         'customer_id',
         'service_type',
+        'date',
         'shipper_name',
         'shipper_address',
         'shipper_postcode',
