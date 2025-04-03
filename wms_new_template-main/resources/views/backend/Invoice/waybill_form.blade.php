@@ -139,20 +139,6 @@
                                     <label for="order_total_weight">Total Weight:</label>
                                     <input type="text" class="form-control" name="order_products[total_weight]" id="order_total_weight">
                                 </div>
-                                {{--  --}}
-                                <h3>Upload Files</h3>
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3>Upload Files</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="dropzoneArea" class="dropzone">
-                                            <div class="dz-message" data-dz-message>
-                                                <span>Drag and drop files here or click to upload</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <!-- Back Button -->
                                 <a href="{{ route('waybills.index') }}" class="btn btn-secondary">Back</a>
                                 <button type="submit" id="generateWaybillButton" class="btn btn-primary">Generate Waybill</button>

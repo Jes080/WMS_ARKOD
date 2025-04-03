@@ -181,6 +181,7 @@
     });
 
     function sendAPIRequest(waybillId) {
+        $(this).prop('disabled', true);
         const url = `{{ route('waybills.sendAPI', ':id') }}`.replace(':id', waybillId);
 
         fetch(url, {
